@@ -1,0 +1,4 @@
+displayName = Homeward Subworld
+author = GabeHasWon
+version = 0.1
+modReferences = ContinentOfJourney, SubworldLibrary

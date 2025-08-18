@@ -1,0 +1,10 @@
+Items: {
+	DivingLeech: {
+		DisplayName: Diving Leech
+		Tooltip:
+			'''
+			Used to travel to the Abyss
+			'Struggles and gnashes its teeth at you'
+			'''
+	}
+}
