@@ -1,1 +1,10 @@
-Modify this file with a description of your mod.
+--- Abyssal Subworld ---
+by GabeHasWon
+commissioned by ThatOneMonkey369
+
+Moves the Abyss biome from Homeward Journey into its own subworld, and removes it from the overworld.
+You can access the Abyssal Subworld with a Diving Leech, dropped by the Diver boss.
+
+The biome is shaped differently, and is directly exposed to open air. 
+Aside from some adjustments - a few changes to give it a more natural look - the biome is 1:1 what it is in the base mod.
+The biome is also persistent, and will save & load like a normal world.

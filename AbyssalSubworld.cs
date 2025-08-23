@@ -39,7 +39,7 @@ internal class AbyssalSubworld : Subworld
     }
 
     public override List<GenPass> Tasks => [new PassLegacy("Reset", ResetStep, 0.2f), new AbyssalPass("Abyss", 1), new AbyssChestPass("Chests", 1 / 8f), 
-        new CityPass("Shadow Wall", 1 / 3f), new PassLegacy("Metadata", SetMetadata)];
+        new CityPass("Abyssal City", 1 / 3f), new PassLegacy("Metadata", SetMetadata)];
 
     private void SetMetadata(GenerationProgress progress, GameConfiguration configuration)
     {

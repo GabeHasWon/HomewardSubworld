@@ -1,4 +1,4 @@
-displayName = Homeward Subworld
+displayName = Abyssal Subworld
 author = GabeHasWon
-version = 0.1
+version = 1.0
 modReferences = ContinentOfJourney, SubworldLibrary

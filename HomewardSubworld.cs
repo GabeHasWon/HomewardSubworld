@@ -14,7 +14,9 @@ public class HomewardSubworld : Mod
     public override void Load()
         => ChooseSpawnHook = new(typeof(NPCLoader).GetMethod(nameof(NPCLoader.ChooseSpawn), BindingFlags.Public | BindingFlags.Static), ChooseSpawnDetour, true);
 
-
+    /// <summary>
+    /// Forces all spawns in the Abyssal Subworld to spawn.
+    /// </summary>
     public static int? ChooseSpawnDetour(Func<NPCSpawnInfo, int?> orig, NPCSpawnInfo spawnInfo)
     {
         bool wasPlanteraDowned = NPC.downedPlantBoss;

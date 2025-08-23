@@ -1,16 +1,19 @@
 ﻿using ContinentOfJourney;
 using ContinentOfJourney.Tiles.Abyss;
 using Microsoft.Xna.Framework;
-using PathOfTerraria.Common.World.Generation;
 using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.IO;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 
 namespace HomewardSubworld.Generation;
 
+/// <summary>
+/// Generation adapted from Homeward Journey. Used with permission.
+/// </summary>
 public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeight)
 {
     private readonly int[,] _pillar1 = 
@@ -64,7 +67,7 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
 
         CoJWorldGeneration.theatrePos = new Vector2(300, (float)Main.worldSurface + 300);
 
-        progress.Message = "Basing the Abyss...";
+        progress.Message = Language.GetTextValue("Mods.HomewardSubworld.Generation.Carving");
 
         float height;
         bool isThoriumLoaded = false;
@@ -95,7 +98,7 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
             WorldGen.TileRunner(Main.rand.Next(50, Main.maxTilesX - 50), center - 100 + radius2 - (int)(Main.rand.NextFloat() * radius2 * 1.98), str, WorldGen.genRand.Next(2, 6), type);
         }
 
-        progress.Message = "Decorating the Abyss...";
+        progress.Message = Language.GetTextValue("Mods.HomewardSubworld.Generation.Decor");
 
         for (float i = -rocklayer; i < rocklayer; i += 0.3f)
         {
@@ -183,7 +186,7 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
                     }
         }
 
-        progress.Message = "Growing the Abyss...";
+        progress.Message = Language.GetTextValue("Mods.HomewardSubworld.Generation.Growing");
 
         int start = 10;
         int end = Main.maxTilesX - 10;
@@ -319,7 +322,7 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
                 height += Main.rand.Next(20, 35);
         }
 
-        progress.Message = "The Abyss is breathing...";
+        Language.GetTextValue("Mods.HomewardSubworld.Generation.Aging");
 
         for (height = (float)Main.worldSurface; height < Main.maxTilesY - 200 - 100; height += 1)
         {

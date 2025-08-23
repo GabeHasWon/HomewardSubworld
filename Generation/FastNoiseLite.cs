@@ -55,7 +55,7 @@ using System.Runtime.CompilerServices;
 // Switch between using floats or doubles for input position
 using FNLfloat = System.Single;
 
-namespace PathOfTerraria.Common.World.Generation;
+namespace HomewardSubworld.Generation;
 
 public class FastNoiseLite
 {
@@ -2993,19 +2993,13 @@ public class FastNoiseLite
 
 		float a = 0.5f - x0 * x0 - y0 * y0;
 		if (a <= 0)
-		{
 			n0 = 0;
-		}
 		else
-		{
 			n0 = a * a * (a * a) * GradCoord(seed, i, j, x0, y0);
-		}
 
 		float c = (float)(2 * (1 - 2 * G2) * (1 / G2 - 2)) * t + ((float)(-2 * (1 - 2 * G2) * (1 - 2 * G2)) + a);
 		if (c <= 0)
-		{
 			n2 = 0;
-		}
 		else
 		{
 			float x2 = x0 + (2 * (float)G2 - 1);
@@ -3019,13 +3013,9 @@ public class FastNoiseLite
 			float y1 = y0 + ((float)G2 - 1);
 			float b = 0.5f - x1 * x1 - y1 * y1;
 			if (b <= 0)
-			{
 				n1 = 0;
-			}
 			else
-			{
 				n1 = b * b * (b * b) * GradCoord(seed, i, j + PrimeY, x1, y1);
-			}
 		}
 		else
 		{
@@ -3033,13 +3023,9 @@ public class FastNoiseLite
 			float y1 = y0 + (float)G2;
 			float b = 0.5f - x1 * x1 - y1 * y1;
 			if (b <= 0)
-			{
 				n1 = 0;
-			}
 			else
-			{
 				n1 = b * b * (b * b) * GradCoord(seed, i + PrimeX, j, x1, y1);
-			}
 		}
 
 		return (n0 + n1 + n2) * 99.83685446303647f;
@@ -3081,9 +3067,7 @@ public class FastNoiseLite
 		for (int l = 0; ; l++)
 		{
 			if (a > 0)
-			{
 				value += a * a * (a * a) * GradCoord(seed, i, j, k, x0, y0, z0);
-			}
 
 			if (ax0 >= ay0 && ax0 >= az0)
 			{
@@ -3114,9 +3098,7 @@ public class FastNoiseLite
 			}
 
 			if (l == 1)
-			{
 				break;
-			}
 
 			ax0 = 0.5f - ax0;
 			ay0 = 0.5f - ay0;
@@ -3190,9 +3172,7 @@ public class FastNoiseLite
 				float y2 = y0 + (float)(3 * G2 - 1);
 				float a2 = 2.0f / 3.0f - x2 * x2 - y2 * y2;
 				if (a2 > 0)
-				{
 					value += a2 * a2 * (a2 * a2) * GradCoord(seed, i + (PrimeX << 1), j + PrimeY, x2, y2);
-				}
 			}
 			else
 			{
@@ -3200,9 +3180,7 @@ public class FastNoiseLite
 				float y2 = y0 + (float)(G2 - 1);
 				float a2 = 2.0f / 3.0f - x2 * x2 - y2 * y2;
 				if (a2 > 0)
-				{
 					value += a2 * a2 * (a2 * a2) * GradCoord(seed, i, j + PrimeY, x2, y2);
-				}
 			}
 
 			if (yi - xmyi > 1)
@@ -3211,9 +3189,7 @@ public class FastNoiseLite
 				float y3 = y0 + (float)(3 * G2 - 2);
 				float a3 = 2.0f / 3.0f - x3 * x3 - y3 * y3;
 				if (a3 > 0)
-				{
 					value += a3 * a3 * (a3 * a3) * GradCoord(seed, i + PrimeX, j + (PrimeY << 1), x3, y3);
-				}
 			}
 			else
 			{
@@ -3221,9 +3197,7 @@ public class FastNoiseLite
 				float y3 = y0 + (float)G2;
 				float a3 = 2.0f / 3.0f - x3 * x3 - y3 * y3;
 				if (a3 > 0)
-				{
 					value += a3 * a3 * (a3 * a3) * GradCoord(seed, i + PrimeX, j, x3, y3);
-				}
 			}
 		}
 		else
@@ -3234,9 +3208,7 @@ public class FastNoiseLite
 				float y2 = y0 - (float)G2;
 				float a2 = 2.0f / 3.0f - x2 * x2 - y2 * y2;
 				if (a2 > 0)
-				{
 					value += a2 * a2 * (a2 * a2) * GradCoord(seed, i - PrimeX, j, x2, y2);
-				}
 			}
 			else
 			{
@@ -3244,9 +3216,7 @@ public class FastNoiseLite
 				float y2 = y0 + (float)G2;
 				float a2 = 2.0f / 3.0f - x2 * x2 - y2 * y2;
 				if (a2 > 0)
-				{
 					value += a2 * a2 * (a2 * a2) * GradCoord(seed, i + PrimeX, j, x2, y2);
-				}
 			}
 
 			if (yi < xmyi)
@@ -3255,9 +3225,7 @@ public class FastNoiseLite
 				float y2 = y0 - (float)(G2 - 1);
 				float a2 = 2.0f / 3.0f - x2 * x2 - y2 * y2;
 				if (a2 > 0)
-				{
 					value += a2 * a2 * (a2 * a2) * GradCoord(seed, i, j - PrimeY, x2, y2);
-				}
 			}
 			else
 			{
@@ -3265,9 +3233,7 @@ public class FastNoiseLite
 				float y2 = y0 + (float)(G2 - 1);
 				float a2 = 2.0f / 3.0f - x2 * x2 - y2 * y2;
 				if (a2 > 0)
-				{
 					value += a2 * a2 * (a2 * a2) * GradCoord(seed, i, j + PrimeY, x2, y2);
-				}
 			}
 		}
 
@@ -3580,9 +3546,7 @@ public class FastNoiseLite
 			distance0 = FastSqrt(distance0);
 
 			if (mCellularReturnType >= CellularReturnType.Distance2)
-			{
 				distance1 = FastSqrt(distance1);
-			}
 		}
 
 		return mCellularReturnType switch
@@ -3737,9 +3701,7 @@ public class FastNoiseLite
 			distance0 = FastSqrt(distance0);
 
 			if (mCellularReturnType >= CellularReturnType.Distance2)
-			{
 				distance1 = FastSqrt(distance1);
-			}
 		}
 
 		return mCellularReturnType switch
@@ -4226,13 +4188,9 @@ public class FastNoiseLite
 			float xo, yo;
 
 			if (outGradOnly)
-			{
 				GradCoordOut(seed, i, j, out xo, out yo);
-			}
 			else
-			{
 				GradCoordDual(seed, i, j, x0, y0, out xo, out yo);
-			}
 
 			vx += aaaa * xo;
 			vy += aaaa * yo;
@@ -4246,13 +4204,9 @@ public class FastNoiseLite
 			float cccc = c * c * (c * c);
 			float xo, yo;
 			if (outGradOnly)
-			{
 				GradCoordOut(seed, i + PrimeX, j + PrimeY, out xo, out yo);
-			}
 			else
-			{
 				GradCoordDual(seed, i + PrimeX, j + PrimeY, x2, y2, out xo, out yo);
-			}
 
 			vx += cccc * xo;
 			vy += cccc * yo;
@@ -4269,13 +4223,9 @@ public class FastNoiseLite
 				float xo, yo;
 
 				if (outGradOnly)
-				{
 					GradCoordOut(seed, i, j + PrimeY, out xo, out yo);
-				}
 				else
-				{
 					GradCoordDual(seed, i, j + PrimeY, x1, y1, out xo, out yo);
-				}
 
 				vx += bbbb * xo;
 				vy += bbbb * yo;
@@ -4292,13 +4242,9 @@ public class FastNoiseLite
 				float xo, yo;
 
 				if (outGradOnly)
-				{
 					GradCoordOut(seed, i + PrimeX, j, out xo, out yo);
-				}
 				else
-				{
 					GradCoordDual(seed, i + PrimeX, j, x1, y1, out xo, out yo);
-				}
 
 				vx += bbbb * xo;
 				vy += bbbb * yo;
@@ -4352,13 +4298,9 @@ public class FastNoiseLite
 				float aaaa = a * a * (a * a);
 				float xo, yo, zo;
 				if (outGradOnly)
-				{
 					GradCoordOut(seed, i, j, k, out xo, out yo, out zo);
-				}
 				else
-				{
 					GradCoordDual(seed, i, j, k, x0, y0, z0, out xo, out yo, out zo);
-				}
 
 				vx += aaaa * xo;
 				vy += aaaa * yo;
@@ -4398,13 +4340,9 @@ public class FastNoiseLite
 				float bbbb = b * b * (b * b);
 				float xo, yo, zo;
 				if (outGradOnly)
-				{
 					GradCoordOut(seed, i1, j1, k1, out xo, out yo, out zo);
-				}
 				else
-				{
 					GradCoordDual(seed, i1, j1, k1, x1, y1, z1, out xo, out yo, out zo);
-				}
 
 				vx += bbbb * xo;
 				vy += bbbb * yo;
@@ -4412,9 +4350,7 @@ public class FastNoiseLite
 			}
 
 			if (l == 1)
-			{
 				break;
-			}
 
 			ax0 = 0.5f - ax0;
 			ay0 = 0.5f - ay0;

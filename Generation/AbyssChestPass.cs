@@ -9,6 +9,9 @@ using Terraria.WorldBuilding;
 
 namespace HomewardSubworld.Generation;
 
+/// <summary>
+/// Generation adapted from Homeward Journey. Used with permission.
+/// </summary>
 public class AbyssChestPass(string name, float loadWeight) : GenPass(name, loadWeight)
 {
     private readonly int[,] _shrine1 = {

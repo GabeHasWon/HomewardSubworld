@@ -4,7 +4,14 @@ Items: {
 		Tooltip:
 			'''
 			Used to travel to the Abyss
-			'Struggles and gnashes its teeth at you'
+			'Gnashes its teeth at you'
 			'''
 	}
+}
+
+Generation: {
+	Carving: Carving the Abyss...
+	Decor: Decorating the Abyss...
+	Growing: Growing the Abyss...
+	Aging: Crumbling the Abyss...
 }

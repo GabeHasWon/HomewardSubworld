@@ -20,6 +20,9 @@ using Terraria.WorldBuilding;
 
 namespace HomewardSubworld.Generation;
 
+/// <summary>
+/// Generation adapted from Homeward Journey. Used with permission.
+/// </summary>
 public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
 {
     private readonly int[,] _house2 = new int[44, 74]
