@@ -9,6 +9,7 @@ using Terraria.IO;
 using Terraria.WorldBuilding;
 using ReLogic.Graphics;
 using HomewardSubworld.Generation;
+using ContinentOfJourney;
 
 namespace HomewardSubworld;
 
@@ -38,8 +39,20 @@ internal class AbyssalSubworld : Subworld
         }
     }
 
-    public override List<GenPass> Tasks => [new PassLegacy("Reset", ResetStep, 0.2f), new AbyssalPass("Abyss", 1), new AbyssChestPass("Chests", 1 / 8f), 
+    public override List<GenPass> Tasks => [new PassLegacy("Reset", ResetStep, 0.2f), new AbyssalPass("Abyss", 1), new Generation.AbyssChestPass("Chests", 1 / 8f), 
         new CityPass("Abyssal City", 1 / 3f), new PassLegacy("Metadata", SetMetadata)];
+
+    public override void CopyMainWorldData()
+    {
+        SubworldSystem.CopyWorldData("downedDiver", DownedBossSystem.downedDiverBoss);
+        SubworldSystem.CopyWorldData("downedBarrier", DownedBossSystem.downedBarrier);
+    }
+
+    public override void ReadCopiedMainWorldData()
+    {
+        DownedBossSystem.downedDiverBoss = SubworldSystem.ReadCopiedWorldData<bool>("downedDiver");
+        DownedBossSystem.downedBarrier = SubworldSystem.ReadCopiedWorldData<bool>("downedBarrier");
+    }
 
     private void SetMetadata(GenerationProgress progress, GameConfiguration configuration)
     {

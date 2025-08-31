@@ -1,5 +1,6 @@
 ﻿using ContinentOfJourney;
 using ContinentOfJourney.Tiles.Abyss;
+using ContinentOfJourney.Tiles.Backdoor.Plants;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -65,8 +66,6 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
         if (DownedBossSystem.isBackdoorWorld) 
             return;
 
-        CoJWorldGeneration.theatrePos = new Vector2(300, (float)Main.worldSurface + 300);
-
         progress.Message = Language.GetTextValue("Mods.HomewardSubworld.Generation.Carving");
 
         float height;
@@ -95,7 +94,8 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
             bool onyx = i % 6 == 1;
             int str = onyx ? WorldGen.genRand.Next(3, 7) : WorldGen.genRand.Next(4, 8);
             int type = onyx ? ModContent.TileType<Onyx>() : ModContent.TileType<DeepOre>();
-            WorldGen.TileRunner(Main.rand.Next(50, Main.maxTilesX - 50), center - 100 + radius2 - (int)(Main.rand.NextFloat() * radius2 * 1.98), str, WorldGen.genRand.Next(2, 6), type);
+            WorldGen.TileRunner(Main.rand.Next(50, Main.maxTilesX - 50), center - 100 + radius2 - (int)(Main.rand.NextFloat() * radius2 * 1.98), str, 
+                WorldGen.genRand.Next(2, 6), type);
         }
 
         progress.Message = Language.GetTextValue("Mods.HomewardSubworld.Generation.Decor");
@@ -110,7 +110,8 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
             }
             else
             {
-                WorldGen.digTunnel(WorldGen.genRand.Next(100, Main.maxTilesX - 100), placeToDig, 1 - Main.rand.NextFloat() * 2, 1 - Main.rand.NextFloat() * 2, 3 + Main.rand.Next(0, 5), 3 + Main.rand.Next(0, 5), false);
+                WorldGen.digTunnel(WorldGen.genRand.Next(100, Main.maxTilesX - 100), placeToDig, 1 - Main.rand.NextFloat() * 2, 
+                    1 - Main.rand.NextFloat() * 2, 3 + Main.rand.Next(0, 5), 3 + Main.rand.Next(0, 5), false);
             }
         }
 
@@ -240,9 +241,9 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
                             tile.BlockType = blockType;
 
                             if (Main.rand.NextBool(4)) 
-                                WorldGen.PlaceTile(x, (int)height - 1, ModContent.TileType<ContinentOfJourney.Tiles.Backdoor.Plants.BackdoorPlantNormal_Tall>(), mute: true, false, -1, Main.rand.Next(20));
+                                WorldGen.PlaceTile(x, (int)height - 1, ModContent.TileType<BackdoorPlantNormal_Tall>(), mute: true, false, -1, Main.rand.Next(20));
                             else 
-                                WorldGen.PlaceTile(x, (int)height - 1, ModContent.TileType<ContinentOfJourney.Tiles.Backdoor.Plants.BackdoorPlantNormal>(), mute: true, false, -1, Main.rand.Next(11));
+                                WorldGen.PlaceTile(x, (int)height - 1, ModContent.TileType<BackdoorPlantNormal>(), mute: true, false, -1, Main.rand.Next(11));
 
                             WorldGen.GrowTree(x, (int)height);
                         }

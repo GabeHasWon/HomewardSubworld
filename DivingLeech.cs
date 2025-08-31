@@ -1,9 +1,11 @@
-﻿using ContinentOfJourney.Items;
+﻿using ContinentOfJourney;
+using ContinentOfJourney.Items;
 using ContinentOfJourney.NPCs.Boss_Diver;
 using SubworldLibrary;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace HomewardSubworld;
@@ -36,6 +38,12 @@ internal class TheDiverNPC : GlobalNPC
         if (npc.type == ModContent.NPCType<Diver>())
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DivingLeech>()));
     }
+
+    public override void ModifyGlobalLoot(GlobalLoot globalLoot)
+    {
+        globalLoot.Add(ItemDropRule.ByCondition(new DownedPlanteraNotDownedDiver(), ModContent.ItemType<DivingLeech>(), 100));
+        globalLoot.Add(ItemDropRule.ByCondition(new DownedDiver(), ModContent.ItemType<DivingLeech>(), 1500));
+    }
 }
 
 internal class TheDiverGlobalItem : GlobalItem
@@ -45,4 +53,18 @@ internal class TheDiverGlobalItem : GlobalItem
         if (item.type == ModContent.ItemType<DiverTreasureBag>())
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<DivingLeech>()));
     }
+}
+
+public class DownedPlanteraNotDownedDiver : IItemDropRuleCondition, IProvideItemConditionDescription
+{
+    public bool CanDrop(DropAttemptInfo info) => NPC.downedPlantBoss && !DownedBossSystem.downedDiverBoss;
+    public bool CanShowItemDropInUI() => false;
+    public string GetConditionDescription() => null;
+}
+
+public class DownedDiver : IItemDropRuleCondition, IProvideItemConditionDescription
+{
+    public bool CanDrop(DropAttemptInfo info) => DownedBossSystem.downedDiverBoss;
+    public bool CanShowItemDropInUI() => true;
+    public string GetConditionDescription() => Language.GetTextValue("HomewardSubworld.PostDiver");
 }
