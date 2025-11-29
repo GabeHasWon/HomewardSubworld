@@ -126,7 +126,9 @@ public class AbyssChestPass(string name, float loadWeight) : GenPass(name, loadW
                                 tile.Slope = 0;
                                 tile.IsHalfBlock = false;
                                 tile.HasTile = true;
+
                                 int chestIndex = WorldGen.PlaceChest(k - 2, l - 1, (ushort)ModContent.TileType<ContinentOfJourney.Tiles.Abyss.AbyssChest>(), false, 1);
+
                                 if (chestIndex != -1)
                                 {
                                     Chest chest = Main.chest[chestIndex];

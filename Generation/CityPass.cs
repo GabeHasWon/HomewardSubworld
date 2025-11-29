@@ -5406,14 +5406,16 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
     internal static void ConvertTileToTheDark(int i, int j, int step = 0)
     {
         Tile tile = Main.tile[i, j];
-        if (tile.HasTile && tile.TileType == 21 && tile.TileType == 467 && tile.TileType == 441 && tile.TileType == 468)
+
+        if (tile.HasTile && tile.TileType is TileID.Containers or TileID.Containers2 or TileID.FakeContainers or TileID.FakeContainers2)
         {
             tile.WallType = (ushort)ModContent.WallType<DarkBrickWall>();
             return;
         }
 
         Tile tile2 = Main.tile[i, j - 1];
-        if (tile2.HasTile && tile2.TileType == 21 && tile2.TileType == 467 && tile2.TileType == 441 && tile2.TileType == 468)
+
+        if (tile2.HasTile && tile.TileType is TileID.Containers or TileID.Containers2 or TileID.FakeContainers or TileID.FakeContainers2)
         {
             tile.WallType = (ushort)ModContent.WallType<DarkBrickWall>();
             tile.TileType = (ushort)ModContent.TileType<DarkBrick>();
@@ -5615,25 +5617,25 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
             {
                 Tile tileSafely6 = Framing.GetTileSafely(num35, (int)num34);
                 tileSafely6.LiquidAmount = byte.MaxValue;
-                if (tileSafely6.LiquidType == 1)
+                if (tileSafely6.LiquidType == LiquidID.Lava)
                 {
-                    tileSafely6.LiquidType = 0;
+                    tileSafely6.LiquidType = LiquidID.Water;
                 }
 
-                if (tileSafely6.TileType == 374)
+                if (tileSafely6.TileType == TileID.LavaDrip)
                 {
-                    tileSafely6.TileType = 373;
+                    tileSafely6.TileType = TileID.WaterDrip;
                 }
 
-                if (tileSafely6.TileType == 368 || tileSafely6.TileType == 369 || tileSafely6.TileType == 367 || tileSafely6.TileType == 357)
+                if (tileSafely6.TileType is TileID.Granite or TileID.GraniteBlock or TileID.Marble or TileID.MarbleBlock)
                 {
                     tileSafely6.TileType = (ushort)ModContent.TileType<AbyssStone>();
                 }
 
-                if (tileSafely6.WallType == 15 || tileSafely6.WallType == 64 || tileSafely6.WallType == 205 || tileSafely6.WallType == 204 || tileSafely6.WallType == 206
-                    || tileSafely6.WallType == 207 || tileSafely6.WallType == 180 || tileSafely6.WallType == 178)
+                if (tileSafely6.WallType is WallID.MudUnsafe or WallID.JungleUnsafe or WallID.JungleUnsafe2 or WallID.JungleUnsafe1 or WallID.JungleUnsafe3 or WallID.JungleUnsafe4 
+                    or WallID.GraniteUnsafe or WallID.MarbleUnsafe)
                 {
-                    tileSafely6.WallType = 0;
+                    tileSafely6.WallType = WallID.None;
                 }
             }
         }
@@ -5658,7 +5660,8 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
             for (int num37 = num32; num37 < num33; num37++)
             {
                 Tile tileSafely7 = Framing.GetTileSafely(num37, num36);
-                if (tileSafely7.TileType == 21 || tileSafely7.TileType == 468)
+
+                if (tileSafely7.TileType is TileID.Containers or TileID.FakeContainers2)
                 {
                     int num38 = num37 - tileSafely7.TileFrameX % 36 / 18;
                     int num39 = num36 - ((tileSafely7.TileFrameY > 18) ? 1 : 0);
@@ -6606,9 +6609,9 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     if (!rectangle2.Intersects(value) && !rectangle2.Intersects(value2) && !rectangle2.Intersects(value3) && tileSafely36.HasTile
                         && tileSafely36.TileType == ModContent.TileType<AbyssStone>() && tileSafely36.BlockType == BlockType.Solid
                         && !tileSafely37.HasTile && !tileSafely38.HasTile && !tileSafely39.HasTile && !tileSafely40.HasTile && !tileSafely41.HasTile
-                        && !tileSafely42.HasTile && !tileSafely43.HasTile && tileSafely37.WallType == 0 && tileSafely38.WallType == 0
-                        && tileSafely39.WallType == 0 && tileSafely40.WallType == 0
-                        && tileSafely41.WallType == 0 && tileSafely42.WallType == 0 && tileSafely43.WallType == 0)
+                        && !tileSafely42.HasTile && !tileSafely43.HasTile && tileSafely37.WallType == WallID.None && tileSafely38.WallType == WallID.None
+                        && tileSafely39.WallType == WallID.None && tileSafely40.WallType == WallID.None
+                        && tileSafely41.WallType == WallID.None && tileSafely42.WallType == WallID.None && tileSafely43.WallType == WallID.None)
                     {
                         WorldGen.PlaceTile(num116, num115, 92);
                     }

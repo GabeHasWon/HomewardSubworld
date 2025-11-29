@@ -4,7 +4,9 @@ using ContinentOfJourney.Tiles.Theatre;
 using ContinentOfJourney.Tiles.TheDark;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace HomewardSubworld.Generation;
@@ -858,7 +860,7 @@ internal class MazeGeneration
     {
         int length = TheaterArray.GetLength(0);
         int length2 = TheaterArray.GetLength(1);
-        new Rectangle(x - length2 / 2, y - length / 2, length2, length);
+
         for (int num24 = TheaterArray.GetLength(0) - 1; num24 >= 0; num24--)
         {
             for (int n = 0; n < TheaterArray.GetLength(1); n++)
@@ -870,18 +872,20 @@ internal class MazeGeneration
                     Tile tileSafely4 = Framing.GetTileSafely(i2, j2);
                     tileSafely4.ClearTile();
                     tileSafely4.LiquidAmount = 0;
-                    tileSafely4.LiquidType = 0;
+                    tileSafely4.LiquidType = LiquidID.Water;
+
                     if (TheaterArray[num24, n] != 10)
                     {
-                        tileSafely4.WallType = 0;
+                        tileSafely4.WallType = WallID.None;
                     }
 
                     if (TheaterArray[num24, n] == 5)
                     {
                         WorldGen.PlaceTile(i2, j2, ModContent.TileType<TheatreFrame>());
                     }
-                    else if (TheaterArray[num24, n] != 10 && TheaterArray[num24 - 1, n] != 1 && TheaterArray[num24, n - 1] != 1 && TheaterArray[num24 + 1, n] != 1 && TheaterArray[num24, n + 1] != 1
-                        && TheaterArray[num24 - 1, n - 1] != 1 && TheaterArray[num24 + 1, n - 1] != 1 && TheaterArray[num24 + 1, n - 1] != 1 && TheaterArray[num24 + 1, n + 1] != 1)
+                    else if (TheaterArray[num24, n] != 10 && TheaterArray[num24 - 1, n] != 1 && TheaterArray[num24, n - 1] != 1 && TheaterArray[num24 + 1, n] != 1 
+                        && TheaterArray[num24, n + 1] != 1 && TheaterArray[num24 - 1, n - 1] != 1 && TheaterArray[num24 + 1, n - 1] != 1 && TheaterArray[num24 + 1, n - 1] != 1 
+                        && TheaterArray[num24 + 1, n + 1] != 1)
                     {
                         WorldGen.PlaceWall(i2, j2, ModContent.WallType<TheatreProtectionWall>());
                     }
@@ -937,18 +941,18 @@ internal class MazeGeneration
         }
     }
 
-    internal static bool SetUpMaze(int num)
+    internal static bool SetUpMaze(int mazeSize)
     {
-        int num2 = (int)CoJWorldGeneration.theatrePos.X;
-        int num3 = (int)CoJWorldGeneration.theatrePos.Y;
-        float num5 = num * 0.76f;
-        int num6 = ((num2 <= Main.maxTilesX / 2) ? 1 : (-1));
-        for (int i = -num; i < num; i++)
+        int baseX = (int)CoJWorldGeneration.theatrePos.X;
+        int baseY = (int)CoJWorldGeneration.theatrePos.Y;
+        float num5 = mazeSize * 0.76f;
+        int num6 = ((baseX <= Main.maxTilesX / 2) ? 1 : (-1));
+        for (int i = -mazeSize; i < mazeSize; i++)
         {
             float num7 = 0f;
             for (int j = (int)(0f - num5); j < num5; j++)
             {
-                if (num7 != 0f || CityPass.TilePosInOval(i, j, num))
+                if (num7 != 0f || CityPass.TilePosInOval(i, j, mazeSize))
                 {
                     if (num7 == 0f)
                     {
@@ -959,32 +963,32 @@ internal class MazeGeneration
                         break;
                     }
 
-                    Tile tileSafely = Framing.GetTileSafely(num2 + i, num3 + j);
-                    if (tileSafely.HasTile && (Main.tileDungeon[tileSafely.TileType] || tileSafely.TileType == 226))
+                    Tile tileSafely = Framing.GetTileSafely(baseX + i, baseY + j);
+                    if (tileSafely.HasTile && (Main.tileDungeon[tileSafely.TileType] || tileSafely.TileType == TileID.LihzahrdBrick))
                     {
-                        num2 += num6;
+                        baseX += num6;
                     }
                 }
             }
         }
 
-        for (int k = -num; k < num; k++)
+        for (int k = -mazeSize; k < mazeSize; k++)
         {
             float num8 = 0f;
             for (int l = (int)(0f - num5); l < num5; l++)
             {
-                if (num8 != 0f || CityPass.TilePosInOval(k, l, num))
+                if (num8 != 0f || CityPass.TilePosInOval(k, l, mazeSize))
                 {
                     if (num8 == 0f)
                         num8 = -l;
                     else if (l > num8)
                         break;
 
-                    Tile tileSafely2 = Framing.GetTileSafely(num2 + k, num3 + l);
+                    Tile tileSafely2 = Framing.GetTileSafely(baseX + k, baseY + l);
                     if (tileSafely2.TileType is 21 or 468)
                     {
-                        int num9 = num2 + k - tileSafely2.TileFrameX % 36 / 18;
-                        int num10 = num3 + l - ((tileSafely2.TileFrameY > 18) ? 1 : 0);
+                        int num9 = baseX + k - tileSafely2.TileFrameX % 36 / 18;
+                        int num10 = baseY + l - ((tileSafely2.TileFrameY > 18) ? 1 : 0);
                         int id = Chest.FindChest(num9, num10);
                         Chest.DestroyChestDirect(num9, num10, id);
                         Tile tileSafely3 = Framing.GetTileSafely(num9, num10);
@@ -997,12 +1001,12 @@ internal class MazeGeneration
                         tileSafely3.HasTile = false;
                     }
 
-                    CityPass.ConvertTileToTheDark(num2 + k, num3 + l);
+                    CityPass.ConvertTileToTheDark(baseX + k, baseY + l);
 
-                    if (!CityPass.TilePosInOval(k - 1, l, num) || !CityPass.TilePosInOval(k + 1, l, num) || !CityPass.TilePosInOval(k, l - 1, num) 
-                        || !CityPass.TilePosInOval(k, l + 1, num))
+                    if (!CityPass.TilePosInOval(k - 1, l, mazeSize) || !CityPass.TilePosInOval(k + 1, l, mazeSize) || !CityPass.TilePosInOval(k, l - 1, mazeSize)
+                        || !CityPass.TilePosInOval(k, l + 1, mazeSize))
                     {
-                        WorldGen.TileRunner(num2 + k, num3 + l, 5.0, 1, ModContent.TileType<DarkBrick_Shift>(), addTile: true);
+                        WorldGen.TileRunner(baseX + k, baseY + l, 5.0, 1, ModContent.TileType<DarkBrick_Shift>(), addTile: true);
                     }
                 }
             }
@@ -1023,12 +1027,12 @@ internal class MazeGeneration
         int num13 = 0;
         while (num12 < num11 && num13 < 10000)
         {
-            int num14 = WorldGen.genRand.Next(-num, num);
-            int num15 = WorldGen.genRand.Next((int)(-num * 0.76), (int)(num * 0.76));
-            if (CityPass.TilePosInOval(num14, num15, num))
+            int num14 = WorldGen.genRand.Next(-mazeSize, mazeSize);
+            int num15 = WorldGen.genRand.Next((int)(-mazeSize * 0.76), (int)(mazeSize * 0.76));
+            if (CityPass.TilePosInOval(num14, num15, mazeSize))
             {
-                num14 += num2;
-                num15 += num3;
+                num14 += baseX;
+                num15 += baseY;
                 int num16 = 0;
                 while (!Main.tile[num14, num15].HasTile && num16 < 10)
                 {
@@ -1044,36 +1048,57 @@ internal class MazeGeneration
             num13++;
         }
 
-        int num17 = num / 20;
-        int num19 = 0;
+        PlaceChestsAndPickaxes(mazeSize, baseX, baseY, num5);
+        return true;
+    }
+
+    private static void PlaceChestsAndPickaxes(int mazeSize, int baseX, int baseY, float num5)
+    {
+        int placementAmount = mazeSize / 20;
+        int chestCount = 0;
+        int pickaxeCount = 0;
         int repeats = 0;
 
-        while (num19 < num17 && false)
+        while (chestCount < placementAmount || pickaxeCount < placementAmount)
         {
-            int num20 = WorldGen.genRand.Next(-num, num);
+            int num20 = WorldGen.genRand.Next(-mazeSize, mazeSize);
             int num21 = WorldGen.genRand.Next(-(int)num5, (int)num5);
 
-            if (CityPass.TilePosInOval(num20, num21, num))
+            if (CityPass.TilePosInOval(num20, num21, mazeSize))
             {
-                if (!Main.tile[num2 + num20, num3 + num21].HasTile)
+                int x = baseX + num20;
+                int y = baseY + num21;
+
+                if (!Main.tile[x, y].HasTile)
                 {
                     for (int m = 0; m < 10; m++)
                     {
                         num21++;
-                        if (Main.tile[num2 + num20, num3 + num21].HasTile)
+                        if (Main.tile[x, y].HasTile)
                         {
                             break;
                         }
                     }
                 }
 
-                int num22 = WorldGen.PlaceChest(num2 + num20, num3 + num21 - 1, (ushort)ModContent.TileType<ShadowChest>());
-                if (num22 != -1)
+                if (WorldGen.genRand.NextBool(2) && chestCount < placementAmount)
                 {
-                    num19++;
-                    Chest chest = Main.chest[num22];
-                    SetChestInfo(chest);
-                    return false;
+                    int num22 = WorldGen.PlaceChest(x, y - 1, (ushort)ModContent.TileType<ShadowChest>());
+
+                    if (num22 != -1)
+                    {
+                        chestCount++;
+                        Chest chest = Main.chest[num22];
+                        SetChestInfo(chest);
+                    }
+                }
+                else if (pickaxeCount < placementAmount)
+                {
+                    WorldGen.PlaceObject(x, y - 1, ModContent.TileType<PickaxeShelf>(), true);
+                    Tile tile = Main.tile[x, y - 1];
+
+                    if (tile.HasTile && tile.TileType == ModContent.TileType<PickaxeShelf>())
+                        pickaxeCount++;
                 }
 
                 repeats++;
@@ -1084,8 +1109,6 @@ internal class MazeGeneration
                 break;
             }
         }
-
-        return true;
     }
 
     private static int SetChestInfo(Chest chest)

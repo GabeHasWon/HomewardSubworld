@@ -1,5 +1,2 @@
-1.0.0.1
-- Allowed the Maze/Theater to spawn in the overworld, should spawn as it would in the base mod
-- 'Synced' the Diver and Wall of Shadows being defeated in the subworld
-- Wall of Shadow's ores now spawn properly in the overworld
-- Diving Leech now drops from any enemy - 1/100 post-Plantera and pre-Diver, 1/1500 post-Diver
+1.0.0.2
+- Fixed the Maze not generating with Pickaxe Shelves or Shadow Chests

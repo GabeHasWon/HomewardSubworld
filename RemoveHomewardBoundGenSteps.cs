@@ -50,18 +50,18 @@ internal class RemoveHomewardBoundGenSteps : ModSystem
         int x = (int)CoJWorldGeneration.theatrePos.X;
         int y = (int)CoJWorldGeneration.theatrePos.Y;
 
-        int num = 180;
+        int size = 180;
 
         if (Main.maxTilesX > 12700)
         {
-            num = 300;
+            size = 300;
         }
         else if (Main.maxTilesX > 8300)
         {
-            num = 240;
+            size = 240;
         }
 
-        bool flowControl = MazeGeneration.SetUpMaze(num);
+        bool flowControl = MazeGeneration.SetUpMaze(size);
 
         if (!flowControl)
             return;
