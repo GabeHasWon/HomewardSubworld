@@ -2,9 +2,7 @@
 using ContinentOfJourney.Items.Accessories;
 using ContinentOfJourney.Tiles.Theatre;
 using ContinentOfJourney.Tiles.TheDark;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

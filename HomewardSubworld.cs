@@ -53,6 +53,8 @@ public class HomewardSubworld : Mod
     {
         byte packetType = reader.ReadByte();
 
+        Logger.Debug($"[Abyssal Subworld]: Got packet {packetType}");
+
         if (packetType == 0)
         {
             short type = reader.ReadInt16();
@@ -61,6 +63,14 @@ public class HomewardSubworld : Mod
             npc.SetDefaults(type);
             npc.Center = Main.player[0].Center;
             DoDeathEventsInfo.Invoke(npc, [Main.player[0]]);
+
+            if (type == ModContent.NPCType<WallofShadow>())
+            {
+                ref bool wallOfShadowGen = ref ModContent.GetInstance<BarrierTrackingSystem>().wallOfShadowGen;
+
+                if (SubworldSystem.Current is null && !wallOfShadowGen)
+                    AbyssalPlayer.GenerateWallOfShadow(ref wallOfShadowGen);
+            }
         }
     }
 
@@ -106,31 +116,37 @@ public class AbyssalPlayer : ModPlayer
         ref bool wallOfShadowGen = ref ModContent.GetInstance<BarrierTrackingSystem>().wallOfShadowGen;
 
         if (SubworldSystem.Current is null && holdsWallofShadowDeath && !wallOfShadowGen)
+            GenerateWallOfShadow(ref wallOfShadowGen);
+    }
+
+    internal static void GenerateWallOfShadow(ref bool wallOfShadowGen)
+    {
+        wallOfShadowGen = true;
+
+        for (int i = 0; i < Main.maxTilesX; i++)
         {
-            for (int i = 0; i < Main.maxTilesX; i++)
+            int num = WorldGen.genRand.Next(0, Main.maxTilesX);
+            int num2 = WorldGen.genRand.Next((int)Main.worldSurface, Main.maxTilesY - 300);
+
+            if (Main.tile[num, num2].TileType is 53 or 397 or 404 or 396 or 234 or 112 or 116 or 400 or 401 or 403)
             {
-                int num = WorldGen.genRand.Next(0, Main.maxTilesX);
-                int num2 = WorldGen.genRand.Next((int)Main.worldSurface, Main.maxTilesY - 300);
-
-                if (Main.tile[num, num2].TileType is 53 or 397 or 404 or 396 or 234 or 112 or 116 or 400 or 401 or 403)
-                {
-                    WorldGen.OreRunner(num, num2, WorldGen.genRand.Next(4, 8), WorldGen.genRand.Next(10, 16), (ushort)ModContent.TileType<EternalOre>());
-                }
-
-                if (Main.tile[num, num2].TileType is 59 or 123 or 60)
-                {
-                    WorldGen.OreRunner(num, num2, WorldGen.genRand.Next(4, 10), WorldGen.genRand.Next(4, 12), (ushort)ModContent.TileType<LivingOre>());
-                }
-
-                if (Main.tile[num, num2].TileType is 161 or 147 or 163 or 200 or 164)
-                {
-                    WorldGen.OreRunner(num, num2, 4.0, WorldGen.genRand.Next(10, 24), (ushort)ModContent.TileType<CubistOre>());
-                }
+                WorldGen.OreRunner(num, num2, WorldGen.genRand.Next(4, 8), WorldGen.genRand.Next(10, 16), (ushort)ModContent.TileType<EternalOre>());
             }
 
-            wallOfShadowGen = true;
+            if (Main.tile[num, num2].TileType is 59 or 123 or 60)
+            {
+                WorldGen.OreRunner(num, num2, WorldGen.genRand.Next(4, 10), WorldGen.genRand.Next(4, 12), (ushort)ModContent.TileType<LivingOre>());
+            }
+
+            if (Main.tile[num, num2].TileType is 161 or 147 or 163 or 200 or 164)
+            {
+                WorldGen.OreRunner(num, num2, 4.0, WorldGen.genRand.Next(10, 24), (ushort)ModContent.TileType<CubistOre>());
+            }
         }
     }
+
+    public override void SaveData(TagCompound tag) => tag.Add("holdsWall", holdsWallofShadowDeath);
+    public override void LoadData(TagCompound tag) => holdsWallofShadowDeath = tag.GetBool("holdsWall");
 }
 
 public class BarrierTrackingSystem : ModSystem

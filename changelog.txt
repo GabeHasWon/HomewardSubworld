@@ -1,2 +1,2 @@
-1.0.0.2
-- Fixed the Maze not generating with Pickaxe Shelves or Shadow Chests
+1.0.0.3
+- Fixed the Wall of Shadow's ore generation not running in the main world when in multiplayer
