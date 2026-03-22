@@ -17,3 +17,14 @@ Generation: {
 }
 
 PostDiver: After the Diver is defeated
+
+Configs: {
+	HomewardSubworldClientConfig: {
+		DebugMessages: {
+			Tooltip: ""
+			Label: Debug Messages
+		}
+
+		DisplayName: Homeward Subworld Client Config
+	}
+}

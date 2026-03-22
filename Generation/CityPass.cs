@@ -5428,6 +5428,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
         int num4 = theDarkMaze[num3, num];
         tile.ClearEverything();
         tile.WallType = (ushort)ModContent.WallType<DarkBrickWall>();
+
         if (!tile.HasTile && num4 == 0 && WorldGen.genRand.NextBool(3) && (num + 1) % 8 == 0 && (num3 + 5) % 7 == 0)
         {
             WorldGen.PlaceTile(i, j, ModContent.TileType<ShadowTorch>());
@@ -5436,10 +5437,10 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
         switch (num4)
         {
             case 1:
-                WorldGen.PlaceTile(i, j, ModContent.TileType<DarkBrick>());
+                QuickPlaceTile(i, j, ModContent.TileType<DarkBrick>());
                 break;
             case 2:
-                WorldGen.PlaceTile(i, j, ModContent.TileType<ShadowBrick>());
+                QuickPlaceTile(i, j, ModContent.TileType<ShadowBrick>());
                 break;
         }
 
@@ -5556,6 +5557,13 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
         }
     }
 
+    public static void QuickPlaceTile(int x, int y, int type)
+    {
+        Tile tile = Main.tile[x, y];
+        tile.TileType = (ushort)type;
+        tile.HasTile = true;
+    }
+
     /// <summary>
     /// Used solely for the Dark/Theater area. Returns false to skip.
     /// </summary>
@@ -5581,6 +5589,8 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
         {
             return;
         }
+
+        HomewardSubworld.LogWorldGen("Running step: CityPass (#0)");
 
         //int num = 180;
 
@@ -5694,6 +5704,8 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
             }
         }
 
+        HomewardSubworld.LogWorldGen("Running step: CityPass (#1 - Post place stone)");
+
         int num40 = (int)(Main.worldSurface + 0.36000001430511475 * ((Main.maxTilesY - 200 - 100) - Main.worldSurface));
         int num41 = (int)(Main.worldSurface + 0.68000000715255737 * ((Main.maxTilesY - 200 - 100) - Main.worldSurface));
         int num42 = WorldGen.genRand.Next(num32 + 51 + 20, num33 - 50 - 20);
@@ -5795,6 +5807,8 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
             tileSafely13 = Framing.GetTileSafely(num42 + 51, num63);
             PlaceTileHere(tileSafely13, num42 + 51, num63, ModContent.TileType<AbyssWrap>());
         }
+
+        HomewardSubworld.LogWorldGen("Running step: CityPass (#2 - Post AbyssWrap placement)");
 
         for (int num64 = -51; num64 < 51; num64++)
         {
@@ -6154,6 +6168,8 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
             break;
         }
 
+        HomewardSubworld.LogWorldGen("Running step: CityPass (#3 - Post Decor placement)");
+
         Rectangle value3 = new Rectangle(0, 0, 2, 2);
         for (int num88 = 0; num88 < 9999; num88++)
         {
@@ -6269,6 +6285,8 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
 
             break;
         }
+
+        HomewardSubworld.LogWorldGen("Running step: CityPass (#4 - Post decor placement again)");
 
         int num98 = 0;
         int num99 = (int)((float)(num41 - num40) / 5f);
@@ -6567,6 +6585,8 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                 num105--;
             }
 
+            HomewardSubworld.LogWorldGen("Running step: CityPass (#5 - Post WorldGen tiles placement)");
+
             if (flag3)
             {
                 for (int num112 = 0; num112 < length4; num112++)
@@ -6671,6 +6691,8 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                         break;
                 }
 
+                HomewardSubworld.LogWorldGen("Running step: CityPass (#5 - Post WorldGen tiles placement)");
+
                 num117++;
                 if (num117 > 5)
                 {
@@ -6769,7 +6791,8 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                 }
 
                 list3.Add((ModContent.ItemType<AbyssFragment>(), 1));
-                list3.Add((ModContent.ItemType<global::ContinentOfJourney.Items.Material.Onyx>(), Main.rand.Next(1, 3)));
+                list3.Add((ModContent.ItemType<ContinentOfJourney.Items.Material.Onyx>(), Main.rand.Next(1, 3)));
+
                 if (Main.rand.Next(1, 6) == 1)
                 {
                     list3.Add((73, Main.rand.Next(1, 6)));
@@ -6782,7 +6805,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                 int num121 = 0;
                 foreach (var item6 in list3)
                 {
-                    Item item3 = new Item();
+                    Item item3 = new();
                     item3.SetDefaults(item6.Item1);
                     item3.stack = item6.Item2;
                     chest3.item[num121] = item3;
@@ -6808,11 +6831,12 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                 Tile tileSafely50 = Framing.GetTileSafely(num123, num122);
                 Tile tileSafely51 = Framing.GetTileSafely(num123, num122 + 1);
                 Tile tileSafely52 = Framing.GetTileSafely(num123, num122 - 1);
-                int num124 = Terraria.Utils.SelectRandom<int>(WorldGen.genRand, ModContent.TileType<AbyssChair>(), ModContent.TileType<AbyssChandelier>(),
+                int placeType = Utils.SelectRandom<int>(WorldGen.genRand, ModContent.TileType<AbyssChair>(), ModContent.TileType<AbyssChandelier>(),
                     ModContent.TileType<AbyssLantern>(), ModContent.TileType<AbyssLamp>(), ModContent.TileType<AbyssTable>());
+
                 if (Main.rand.NextBool(3))
                 {
-                    num124 = Terraria.Utils.SelectRandom<int>(WorldGen.genRand, ModContent.TileType<AbyssBathtub>(), ModContent.TileType<AbyssBed>(),
+                    placeType = Utils.SelectRandom<int>(WorldGen.genRand, ModContent.TileType<AbyssBathtub>(), ModContent.TileType<AbyssBed>(),
                         ModContent.TileType<AbyssBookcase>(), ModContent.TileType<AbyssPiano>(), ModContent.TileType<AbyssSink>(), ModContent.TileType<AbyssSofa>());
                 }
 
@@ -6821,18 +6845,18 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     continue;
                 }
 
-                if (num124 == ModContent.TileType<AbyssChandelier>() || num124 == ModContent.TileType<AbyssLantern>())
+                if (placeType == ModContent.TileType<AbyssChandelier>() || placeType == ModContent.TileType<AbyssLantern>())
                 {
                     if (tileSafely50.HasTile && !tileSafely51.HasTile)
                     {
-                        if (num124 == ModContent.TileType<AbyssChandelier>())
+                        if (placeType == ModContent.TileType<AbyssChandelier>())
                         {
-                            WorldGen.Place2x2(num123, num122 + 1, (ushort)num124, 0);
+                            WorldGen.Place2x2(num123, num122 + 1, (ushort)placeType, 0);
                         }
 
-                        if (num124 == ModContent.TileType<AbyssLantern>())
+                        if (placeType == ModContent.TileType<AbyssLantern>())
                         {
-                            WorldGen.Place1x2Top(num123, num122 + 1, (ushort)num124, 0);
+                            WorldGen.Place1x2Top(num123, num122 + 1, (ushort)placeType, 0);
                         }
                     }
                 }
@@ -6843,32 +6867,32 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                         continue;
                     }
 
-                    if (num124 == ModContent.TileType<AbyssBed>() || num124 == ModContent.TileType<AbyssBathtub>())
+                    if (placeType == ModContent.TileType<AbyssBed>() || placeType == ModContent.TileType<AbyssBathtub>())
                     {
-                        WorldGen.Place4x2(num123, num122 - 1, (ushort)num124, 0);
+                        WorldGen.Place4x2(num123, num122 - 1, (ushort)placeType, 0);
                     }
-                    else if (num124 == ModContent.TileType<AbyssChair>())
+                    else if (placeType == ModContent.TileType<AbyssChair>())
                     {
-                        WorldGen.PlaceObject(num123, num122 - 1, (ushort)num124, mute: false, 0, 0, -1, Main.rand.NextBool(2) ? 1 : (-1));
+                        WorldGen.PlaceObject(num123, num122 - 1, (ushort)placeType, mute: false, 0, 0, -1, Main.rand.NextBool(2) ? 1 : (-1));
                     }
-                    else if (num124 == ModContent.TileType<AbyssSofa>() || num124 == ModContent.TileType<AbyssTable>() || num124 == ModContent.TileType<AbyssPiano>())
+                    else if (placeType == ModContent.TileType<AbyssSofa>() || placeType == ModContent.TileType<AbyssTable>() || placeType == ModContent.TileType<AbyssPiano>())
                     {
-                        WorldGen.Place3x2(num123, num122 - 1, (ushort)num124);
+                        WorldGen.Place3x2(num123, num122 - 1, (ushort)placeType);
                     }
-                    else if (num124 == ModContent.TileType<AbyssBookcase>())
+                    else if (placeType == ModContent.TileType<AbyssBookcase>())
                     {
-                        WorldGen.Place3x4(num123, num122 - 1, (ushort)num124, 0);
+                        WorldGen.Place3x4(num123, num122 - 1, (ushort)placeType, 0);
                     }
-                    else if (num124 == ModContent.TileType<AbyssClock>())
+                    else if (placeType == ModContent.TileType<AbyssClock>())
                     {
-                        WorldGen.PlaceObject(num123, num122 - 1, (ushort)num124);
+                        WorldGen.PlaceObject(num123, num122 - 1, (ushort)placeType);
                     }
-                    else if (num124 == ModContent.TileType<AbyssSink>())
+                    else if (placeType == ModContent.TileType<AbyssSink>())
                     {
-                        WorldGen.Place2x2(num123, num122 - 1, (ushort)num124, 0);
+                        WorldGen.Place2x2(num123, num122 - 1, (ushort)placeType, 0);
                     }
 
-                    if (num124 == ModContent.TileType<AbyssPiano>() || (num124 == ModContent.TileType<AbyssTable>() && Main.rand.NextBool(2)))
+                    if (placeType == ModContent.TileType<AbyssPiano>() || (placeType == ModContent.TileType<AbyssTable>() && Main.rand.NextBool(2)))
                     {
                         int type2 = ModContent.TileType<AbyssCandle>();
                         int x = WorldGen.genRand.Next(num123 - 1, num123 + 1);
@@ -6921,7 +6945,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                 {
                     case 1:
                         num129 = 1;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126, num125 - 1].HasTile && !Main.tile[num126 + 1, num125 - 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126, num125 - 1].HasTile && !Main.tile[num126 + 1, num125 - 1].HasTile
                             && !Main.tile[num126, num125].HasTile && !Main.tile[num126 + 1, num125].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
                             WorldGen.PlaceObject(num126, num125, (ushort)num128, mute: false, num129);
@@ -6930,7 +6954,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                         break;
                     case 2:
                         num129 = 2;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126, num125 - 1].HasTile && !Main.tile[num126 + 1, num125 - 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126, num125 - 1].HasTile && !Main.tile[num126 + 1, num125 - 1].HasTile
                             && !Main.tile[num126, num125].HasTile && !Main.tile[num126 + 1, num125].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
                             WorldGen.PlaceObject(num126, num125, (ushort)num128, mute: false, num129);
@@ -6940,7 +6964,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     case 3:
                         num128 = ModContent.TileType<Painting3x2>();
                         num129 = 0;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126 - 1, num125 + 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126 - 1, num125 + 1].HasTile
                             && !Main.tile[num126, num125].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
                             WorldGen.PlaceObject(num126, num125, (ushort)num128, mute: false, num129);
@@ -6950,7 +6974,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     case 4:
                         num128 = ModContent.TileType<Painting3x2>();
                         num129 = 1;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126 - 1, num125 + 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126 - 1, num125 + 1].HasTile
                             && !Main.tile[num126, num125].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
                             WorldGen.PlaceObject(num126, num125, (ushort)num128, mute: false, num129);
@@ -6960,7 +6984,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     case 5:
                         num128 = ModContent.TileType<Painting3x2>();
                         num129 = 2;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126 - 1, num125 + 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126 - 1, num125 + 1].HasTile
                             && !Main.tile[num126, num125].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
                             WorldGen.PlaceObject(num126, num125, (ushort)num128, mute: false, num129);
@@ -6970,7 +6994,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     case 6:
                         num128 = ModContent.TileType<Painting3x3>();
                         num129 = 0;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
                             && !Main.tile[num126 + 1, num125 - 1].HasTile && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126, num125].HasTile && !Main.tile[num126 + 1, num125].HasTile
                             && !Main.tile[num126 - 1, num125 + 1].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
@@ -6981,7 +7005,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     case 7:
                         num128 = ModContent.TileType<Painting3x3>();
                         num129 = 1;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
                             && !Main.tile[num126 + 1, num125 - 1].HasTile && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126, num125].HasTile && !Main.tile[num126 + 1, num125].HasTile
                             && !Main.tile[num126 - 1, num125 + 1].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
@@ -6992,7 +7016,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     case 8:
                         num128 = ModContent.TileType<Painting3x3>();
                         num129 = 2;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
                             && !Main.tile[num126 + 1, num125 - 1].HasTile && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126, num125].HasTile && !Main.tile[num126 + 1, num125].HasTile
                             && !Main.tile[num126 - 1, num125 + 1].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
@@ -7003,7 +7027,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     case 9:
                         num128 = ModContent.TileType<Painting3x3>();
                         num129 = 3;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
                             && !Main.tile[num126 + 1, num125 - 1].HasTile && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126, num125].HasTile && !Main.tile[num126 + 1, num125].HasTile
                             && !Main.tile[num126 - 1, num125 + 1].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
@@ -7014,7 +7038,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     case 10:
                         num128 = ModContent.TileType<Painting3x3>();
                         num129 = 4;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126 - 1, num125 - 1].HasTile && !Main.tile[num126, num125 - 1].HasTile
                             && !Main.tile[num126 + 1, num125 - 1].HasTile && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126, num125].HasTile && !Main.tile[num126 + 1, num125].HasTile
                             && !Main.tile[num126 - 1, num125 + 1].HasTile && !Main.tile[num126, num125 + 1].HasTile && !Main.tile[num126 + 1, num125 + 1].HasTile)
                         {
@@ -7025,7 +7049,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                     case 11:
                         num128 = ModContent.TileType<PaintingGiant>();
                         num129 = 0;
-                        if (Main.tile[num126, num125].WallType > 0 && !Main.tile[num126 - 2, num125 - 1].HasTile && !Main.tile[num126 - 1, num125 - 1].HasTile
+                        if (Main.tile[num126, num125].WallType > WallID.None && !Main.tile[num126 - 2, num125 - 1].HasTile && !Main.tile[num126 - 1, num125 - 1].HasTile
                             && !Main.tile[num126, num125 - 1].HasTile && !Main.tile[num126 + 1, num125 - 1].HasTile && !Main.tile[num126 + 2, num125 - 1].HasTile
                             && !Main.tile[num126 + 3, num125 - 1].HasTile && !Main.tile[num126 - 2, num125].HasTile && !Main.tile[num126 - 1, num125].HasTile && !Main.tile[num126, num125].HasTile
                             && !Main.tile[num126 + 1, num125].HasTile && !Main.tile[num126 + 2, num125].HasTile && !Main.tile[num126 + 3, num125].HasTile && !Main.tile[num126 - 2, num125 + 1].HasTile
@@ -7054,7 +7078,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                 Tile tileSafely58 = Framing.GetTileSafely(num131 - 1, num130 - 2);
                 if ((tileSafely53.TileType == ModContent.TileType<AbyssBrick_WorldGen>() || tileSafely53.TileType == ModContent.TileType<AbyssStone>())
                     && tileSafely53.Slope == SlopeType.Solid && !tileSafely53.IsHalfBlock && tileSafely53.HasTile && (tileSafely54.TileType == ModContent.TileType<AbyssBrick_WorldGen>()
-                    || tileSafely54.TileType == ModContent.TileType<global::ContinentOfJourney.Tiles.Abyss.AbyssStone>()) && tileSafely54.Slope == SlopeType.Solid && !tileSafely54.IsHalfBlock
+                    || tileSafely54.TileType == ModContent.TileType<AbyssStone>()) && tileSafely54.Slope == SlopeType.Solid && !tileSafely54.IsHalfBlock
                     && tileSafely54.HasTile && Main.rand.NextBool(1, 5) && !tileSafely55.HasTile && !tileSafely56.HasTile && !tileSafely57.HasTile && !tileSafely58.HasTile)
                 {
                     WorldGen.Place2x2Style(num131, num130 - 1, (ushort)ModContent.TileType<AbyssPot>(), Main.rand.Next(0, 3));
@@ -7068,7 +7092,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
             {
                 Tile tileSafely59 = Framing.GetTileSafely(num133, (int)num132);
                 tileSafely59.LiquidAmount = byte.MaxValue;
-                tileSafely59.LiquidType = 0;
+                tileSafely59.LiquidType = LiquidID.Water;
             }
         }
 
@@ -7166,6 +7190,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
             {
                 int num141 = num137 - 34 + num140;
                 int num142 = num138 + num139;
+
                 if (WorldGen.InWorld(num141, num142, 30))
                 {
                     Tile tileSafely64 = Framing.GetTileSafely(num141, num142);
@@ -7175,7 +7200,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                             tileSafely64.TileType = (ushort)ModContent.TileType<TrueAbyssBrick_2>();
                             tileSafely64.IsHalfBlock = false;
                             tileSafely64.Slope = SlopeType.Solid;
-                            tileSafely64.LiquidType = 0;
+                            tileSafely64.LiquidType = LiquidID.Water;
                             tileSafely64.IsActuated = true;
                             tileSafely64.HasTile = true;
                             tileSafely64.WallType = (ushort)ModContent.WallType<AbyssBrickWall>();
@@ -7184,7 +7209,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                             tileSafely64.TileType = (ushort)ModContent.TileType<TrueAbyssBrick>();
                             tileSafely64.IsHalfBlock = false;
                             tileSafely64.Slope = SlopeType.Solid;
-                            tileSafely64.LiquidType = 0;
+                            tileSafely64.LiquidType = LiquidID.Water;
                             tileSafely64.HasTile = true;
                             tileSafely64.WallType = (ushort)ModContent.WallType<AbyssBrickWall>();
                             break;
@@ -7192,7 +7217,7 @@ public class CityPass(string name, float loadWeight) : GenPass(name, loadWeight)
                             tileSafely64.TileType = (ushort)ModContent.TileType<TrueAbyssBrick_3>();
                             tileSafely64.IsHalfBlock = false;
                             tileSafely64.Slope = SlopeType.Solid;
-                            tileSafely64.LiquidType = 0;
+                            tileSafely64.LiquidType = LiquidID.Water;
                             tileSafely64.HasTile = true;
                             tileSafely64.WallType = (ushort)ModContent.WallType<AbyssBrickWall>();
                             break;

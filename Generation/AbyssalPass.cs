@@ -67,6 +67,7 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
             return;
 
         progress.Message = Language.GetTextValue("Mods.HomewardSubworld.Generation.Carving");
+        HomewardSubworld.LogWorldGen("Running step: AbyssalPass (#0 - Carving)");
 
         float height;
         bool isThoriumLoaded = false;
@@ -99,6 +100,7 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
         }
 
         progress.Message = Language.GetTextValue("Mods.HomewardSubworld.Generation.Decor");
+        HomewardSubworld.LogWorldGen("Running step: AbyssalPass (#1 - Decor)");
 
         for (float i = -rocklayer; i < rocklayer; i += 0.3f)
         {
@@ -188,6 +190,7 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
         }
 
         progress.Message = Language.GetTextValue("Mods.HomewardSubworld.Generation.Growing");
+        HomewardSubworld.LogWorldGen("Running step: AbyssalPass (#2 - Growing)");
 
         int start = 10;
         int end = Main.maxTilesX - 10;
@@ -324,6 +327,7 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
         }
 
         Language.GetTextValue("Mods.HomewardSubworld.Generation.Aging");
+        HomewardSubworld.LogWorldGen("Running step: AbyssalPass (#3 - Aging)");
 
         for (height = (float)Main.worldSurface; height < Main.maxTilesY - 200 - 100; height += 1)
         {
@@ -363,5 +367,7 @@ public class AbyssalPass(string name, float loadWeight) : GenPass(name, loadWeig
                 }
             }
         }
+
+        HomewardSubworld.LogWorldGen("Running step: AbyssalPass (#4 - Complete)");
     }
 }

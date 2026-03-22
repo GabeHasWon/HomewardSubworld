@@ -859,6 +859,8 @@ internal class MazeGeneration
         int length = TheaterArray.GetLength(0);
         int length2 = TheaterArray.GetLength(1);
 
+        HomewardSubworld.LogWorldGen("Running step: MazeGeneration (#0 - Theater start)");
+
         for (int num24 = TheaterArray.GetLength(0) - 1; num24 >= 0; num24--)
         {
             for (int n = 0; n < TheaterArray.GetLength(1); n++)
@@ -890,6 +892,8 @@ internal class MazeGeneration
                 }
             }
         }
+
+        HomewardSubworld.LogWorldGen("Running step: MazeGeneration (#1 - Frame end)");
 
         for (int num25 = TheaterArray.GetLength(0) - 1; num25 >= 0; num25--)
         {
@@ -937,10 +941,14 @@ internal class MazeGeneration
                 }
             }
         }
+
+        HomewardSubworld.LogWorldGen("Running step: MazeGeneration (#2 - Theater end)");
     }
 
     internal static bool SetUpMaze(int mazeSize)
     {
+        HomewardSubworld.LogWorldGen("Running step: SetUpMaze (#0 - Start)");
+
         int baseX = (int)CoJWorldGeneration.theatrePos.X;
         int baseY = (int)CoJWorldGeneration.theatrePos.Y;
         float num5 = mazeSize * 0.76f;
@@ -969,6 +977,8 @@ internal class MazeGeneration
                 }
             }
         }
+
+        HomewardSubworld.LogWorldGen("Running step: SetUpMaze (#1 - Scan end)");
 
         for (int k = -mazeSize; k < mazeSize; k++)
         {
@@ -1010,6 +1020,8 @@ internal class MazeGeneration
             }
         }
 
+        HomewardSubworld.LogWorldGen("Running step: SetUpMaze (#2 - Almost done)");
+
         int num11 = 2;
         if (Main.maxTilesX > 4200)
         {
@@ -1047,6 +1059,8 @@ internal class MazeGeneration
         }
 
         PlaceChestsAndPickaxes(mazeSize, baseX, baseY, num5);
+
+        HomewardSubworld.LogWorldGen("Running step: SetUpMaze (#3 - Complete)");
         return true;
     }
 
@@ -1111,10 +1125,10 @@ internal class MazeGeneration
 
     private static int SetChestInfo(Chest chest)
     {
-        int num4 = 0;
+        int choice = WorldGen.genRand.Next(4);
         List<(int, int)> list = [];
 
-        switch (num4)
+        switch (choice)
         {
             case 0:
                 list.Add((ModContent.ItemType<UmbroShield>(), 1));
@@ -1130,8 +1144,8 @@ internal class MazeGeneration
                 break;
         }
 
-        num4++;
-        num4 %= 4;
+        choice++;
+        choice %= 4;
 
         switch (Main.rand.Next(1, 10))
         {
@@ -1239,6 +1253,6 @@ internal class MazeGeneration
             }
         }
 
-        return num4;
+        return choice;
     }
 }

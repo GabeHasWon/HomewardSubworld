@@ -15,24 +15,25 @@ namespace HomewardSubworld.Generation;
 public class AbyssChestPass(string name, float loadWeight) : GenPass(name, loadWeight)
 {
     private readonly int[,] _shrine1 = {
-            {9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9 },
-            {9,9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,9 },
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-            {1,2,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,2,1 },
-            {0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0 },
-            {0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0 },
-            {0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0 },
-            {1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1 },
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-            {9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9 },
+        { 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9 },
+        { 9,9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,9 },
+        { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+        { 1,2,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,2,1 },
+        { 0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0 },
+        { 0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0 },
+        { 0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0 },
+        { 1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1 },
+        { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+        { 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9 },
+    };
 
-        };
     protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
     {
         if (DownedBossSystem.isBackdoorWorld) 
             return;
 
         progress.Message = "Modifying the Abyss";
+        HomewardSubworld.LogWorldGen("Running step: AbyssalChestPass (#0 - Start)");
 
         int centerOfGeneration = Main.maxTilesX / 2;
         int passwordNum = 2;
@@ -296,5 +297,7 @@ public class AbyssChestPass(string name, float loadWeight) : GenPass(name, loadW
                 }
             }
         }
+
+        HomewardSubworld.LogWorldGen("Running step: AbyssalChestPass (#1 - Complete)");
     }
 }

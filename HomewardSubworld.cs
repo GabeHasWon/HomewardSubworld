@@ -5,11 +5,13 @@ using ContinentOfJourney.Tiles;
 using MonoMod.RuntimeDetour;
 using SubworldLibrary;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 using Terraria.ModLoader.IO;
 
 namespace HomewardSubworld;
@@ -21,6 +23,14 @@ public class HomewardSubworld : Mod
         public static readonly byte SendBossDown = 0;
     }
 
+    public class HomewardSubworldClientConfig : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [DefaultValue(false)]
+        public bool DebugMessages { get; set; }
+    }
+
     internal static readonly MethodInfo DoDeathEventsInfo = typeof(NPC).GetMethod("DoDeathEvents", BindingFlags.Instance | BindingFlags.NonPublic);
 
     private static Hook ChooseSpawnHook = null;
@@ -29,6 +39,12 @@ public class HomewardSubworld : Mod
     {
         ChooseSpawnHook = new(typeof(NPCLoader).GetMethod(nameof(NPCLoader.ChooseSpawn), BindingFlags.Public | BindingFlags.Static), ChooseSpawnDetour, true);
         On_NPC.DoDeathEvents += HijackDeathEffects;
+    }
+
+    public static void LogWorldGen(string text)
+    {
+        if (ModContent.GetInstance<HomewardSubworldClientConfig>().DebugMessages)
+            ModContent.GetInstance<HomewardSubworld>().Logger.Debug("[Debug Message] " + text);
     }
 
     /// <summary>
